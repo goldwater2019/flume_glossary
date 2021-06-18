@@ -1,7 +1,6 @@
 package com.xxx.bigdata.flume;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
@@ -23,7 +22,7 @@ public class SourceInterceptor implements Interceptor {
     private final String source;
     private final String env;
     private final Boolean preservingExists;
-    private final Logger logger = LoggerFactory.getLogger(SourceInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SourceInterceptor.class);
 
 
     private SourceInterceptor(String source, String env, Boolean preservingExists) {
@@ -45,6 +44,7 @@ public class SourceInterceptor implements Interceptor {
      * 拦截event
      * 在 header 中增加 source 和 env 信息
      * 根据 preservingExists 的情况判断是否需要覆盖
+     *
      * @param event
      * @return
      */
@@ -79,13 +79,21 @@ public class SourceInterceptor implements Interceptor {
         private String env;
         private Boolean preservingExists;
 
+        /**
+         * 在 build 的时候打日志
+         *
+         * @return
+         */
         @Override
         public Interceptor build() {
+            logger.info("Creating SourceInterceptor, source: {}, env: {}, preservingExists: {}",
+                    source, env, preservingExists);
             return new SourceInterceptor(source, env, preservingExists);
         }
 
         /**
          * 从配置文件中读取数据
+         *
          * @param context
          */
         @Override
@@ -97,7 +105,7 @@ public class SourceInterceptor implements Interceptor {
     }
 
     public static class Constants {
-        private static final String SOURCE="source";
+        private static final String SOURCE = "source";
         private static final String SOURCE_DEFAULT = "file";
 
         private static final String ENV = "env";
