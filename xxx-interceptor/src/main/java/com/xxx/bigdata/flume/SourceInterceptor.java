@@ -44,14 +44,19 @@ public class SourceInterceptor implements Interceptor {
     /**
      * 拦截event
      * 在 header 中增加 source 和 env 信息
+     * 根据 preservingExists 的情况判断是否需要覆盖
      * @param event
      * @return
      */
     @Override
     public Event intercept(Event event) {
         Map<String, String> headers = event.getHeaders();
-        headers.put("source", source);
-        headers.put("env", env);
+        if (!preservingExists || !headers.containsKey("source")) {
+            headers.put("source", source);
+        }
+        if (!preservingExists || !headers.containsKey("env")) {
+            headers.put("env", env);
+        }
         return event;
     }
 
