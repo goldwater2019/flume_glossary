@@ -17,15 +17,15 @@ import java.util.Map;
  * 读取配置文件
  * 确保环境和来源已经通过配置
  */
-public class SourceInterceptor implements Interceptor {
+public class SourceEnvInterceptor implements Interceptor {
 
     private final String source;
     private final String env;
     private final Boolean preservingExists;
-    private static final Logger logger = LoggerFactory.getLogger(SourceInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SourceEnvInterceptor.class);
 
 
-    private SourceInterceptor(String source, String env, Boolean preservingExists) {
+    private SourceEnvInterceptor(String source, String env, Boolean preservingExists) {
         this.source = source;
         this.env = env;
         this.preservingExists = preservingExists;
@@ -88,7 +88,7 @@ public class SourceInterceptor implements Interceptor {
         public Interceptor build() {
             logger.info("Creating SourceInterceptor, source: {}, env: {}, preservingExists: {}",
                     source, env, preservingExists);
-            return new SourceInterceptor(source, env, preservingExists);
+            return new SourceEnvInterceptor(source, env, preservingExists);
         }
 
         /**
